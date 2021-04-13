@@ -33,11 +33,10 @@ To create the analytics database, the following steps will be carried out:
 * Exploratory data analysis of demographics dataset to identify missing values and strategies for data cleaning.
 * Exploratory data analysis of global land temperatures by city dataset to identify missing values and strategies for data cleaning.
 * Perform data cleaning functions on all the datasets.
-* Create dimension tables.
-    * Create immigration calendar dimension table from I94 immigration dataset, this table links to the fact table through the arrdate field.
-    * Create country dimension table from the I94 immigration and the global temperatures dataset. The global land temperatures data was aggregated at country level. The table links to the fact table through the country of residence code allowing analysts to understand correlation between country of residence climate and immigration to US states.
-    * Create usa demographics dimension table from the us cities demographics data. This table links to the fact table through the state code field.
-    * Create fact table from the clean I94 immigration dataset and the visa_type dimension.
+* Create immigration calendar dimension table from I94 immigration dataset, this table links to the fact table through the arrdate field.
+* Create country dimension table from the I94 immigration and the global temperatures dataset. The global land temperatures data was aggregated at country level. The table links to the fact table through the country of residence code allowing analysts to understand correlation between country of residence climate and immigration to US states.
+* Create usa demographics dimension table from the us cities demographics data. This table links to the fact table through the state code field.
+* Create fact table from the clean I94 immigration dataset and the visa_type dimension.
 
 The technology used in this project is Amazon S3, Apache Spark. Data will be read and staged from 
 the s3 repository using Spark.
@@ -53,11 +52,9 @@ the s3 repository using Spark.
 
 The country dimension table is made up of data from the global land temperatures by city and the immigration datasets. The combination of these two datasets allows analysts to study correlations between global land temperatures and immigration patterns to the US.
 
-The us demographics dimension table comes from the demographics dataset and links to the immigration fact table at US state level. This dimension would allow analysts to get insights into migration patterns into the US based on demographics as well as overall population of states. We could ask questions such as, do populous states attract more visitors on a monthly basis? One envisions a dashboard that could be designed based on the data model with drill downs into gradular information on visits to the US. Such a dashboard could foster a culture of data driven decision making within tourism and immigration departments at state level. 
+The us demographics dimension table comes from the demographics dataset and links to the immigration fact table at US state level. This dimension would allow analysts to get insights into migration patterns into the US based on demographics as well as overall population of states. 
 
-The visa type dimension table comes from the immigration datasets and links to the immigaration via the visa_type_key. 
-
-The immigration fact table is the heart of the data model. This table's data comes from the immigration data sets and contains keys that links to the dimension tables. The data dictionary of the immigration dataset contains detailed information on the data that makes up the fact table. 
+The immigration fact table's data comes from the immigration data sets and contains keys that links to the dimension tables. The data dictionary of the immigration dataset contains detailed information on the data that makes up the fact table. 
 
 ### 3.2 Mapping Out Data Pipelines
 The pipeline steps are as follows:
