@@ -49,7 +49,7 @@ the s3 repository using Spark.
 ## Step 3: Define the Data Model
 ### 3.1 Conceptual Data Model
 
-![Database schema](conceptual_model.png)
+<img src=https://github.com/Saswata2k/US-Immigration-Analysis/blob/main/er_diagram.png >
 
 The country dimension table is made up of data from the global land temperatures by city and the immigration datasets. The combination of these two datasets allows analysts to study correlations between global land temperatures and immigration patterns to the US.
 
@@ -72,10 +72,6 @@ The pipeline steps are as follows:
 ## Step 4: Run Pipelines to Model the Data 
 ### 4.1 Create the data model
 > Refer to the jupyter notebook for the data dictionary.
-> 
-### ER Diagram
-
-<img src=https://github.com/Saswata2k/US-Immigration-Analysis/blob/main/er_diagram.png >
 
 ### 4.2 Running the ETL pipeline
 The ETL pipeline is defined in the etl.py script, 
