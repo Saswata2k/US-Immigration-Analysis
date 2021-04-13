@@ -72,6 +72,10 @@ The pipeline steps are as follows:
 ## Step 4: Run Pipelines to Model the Data 
 ### 4.1 Create the data model
 > Refer to the jupyter notebook for the data dictionary.
+> 
+### ER Diagram
+
+<img src=https://github.com/Saswata2k/US-Immigration-Analysis/blob/main/er_diagram.png >
 
 ### 4.2 Running the ETL pipeline
 The ETL pipeline is defined in the etl.py script, 
