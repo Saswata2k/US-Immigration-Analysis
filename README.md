@@ -58,13 +58,16 @@ The immigration fact table's data comes from the immigration data sets and conta
 
 ### 3.2 Mapping Out Data Pipelines
 The pipeline steps are as follows:
-* Load the datasets
-* Clean the I94 Immigration data to create Spark dataframe for each month
-* Create air_traffic dimension and calendar dimension table
-* Extract and clean global temperatures data
-* Create country dimension and immigration fact table
-* Load and preprocess US Demographics data
-* Create demographic dimension table
+* Extract the datasets from given formats of input type(csv/json/sasbat)
+* Clean the I94 Immigration data,air_traffic_data,global temperatures and US demographics dataset
+* Process these datasets and create fact dimensional schema in parquet format with partition keys.
+
+### Explain purpose of the pipeline
+### 3.4 Conceptual Data Model
+Our initial conceptual data model will be based on facts and dimensions datasets in parquet format
+
+In future iterations it will be integrated with redshift. The reason for choosing parquet is this files are light weight and also  Parquet stores the file schema in the file metadata. CSV files don't store file metadata, so readers need to either be supplied with the schema or the schema needs to be inferred.
+
 
 ## Step 4: Run Pipelines to Model the Data 
 ### 4.1 Create the data model
@@ -81,3 +84,4 @@ facts and dimension tables in Amazon S3.
 2. If the data is increased by 10x, we need to scale up our EMR configuration (expensive)
 3. If datasets are to be accessed by multiple users, it's better to have database in distributed environment. We use AWS
 EMR for the same purpose, to have a fault-tolerant, robust distributed data storage system using HDFS for faster operation.
+4. Please note, since we haven't integrated redshift component in the pipeline yet there will not be any primary key/foreign key. However we will define them in the schema for future use.
