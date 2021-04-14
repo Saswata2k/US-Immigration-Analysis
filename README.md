@@ -18,6 +18,9 @@ In addition to the data files, the project workspace includes:
 * configparser
 python 3.6+ is needed to run the python scripts.
 
+### Explanation for choosing specific tech stack / future scope :
+We have used s3 data lakes as it provides distributed and fast data storage in AWS. It's very easy to upload files to s3 and read/process datasets using EC2/EMR machines. We can use partition keys for better performance if customer base/dataset size increases.
+
 ### Steps:
  1: Scope the Project and Gather Data
  2: Explore and Assess the Data
