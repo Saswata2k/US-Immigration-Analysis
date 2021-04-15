@@ -25,7 +25,7 @@ class ETL:
             .getOrCreate()
         return spark
 
-    def process_immigration_data(self, input_data, output_data, im_file_name, temperature_file_name, mapping_file):
+    def process_immigration_data(self, input_data, output_data, im_file_name, fname_temp, f_mapping):
         """
             Process the immigration dataset and creates fact table and calendar and country dimension table.
         """
@@ -37,19 +37,24 @@ class ETL:
         immigration_df = Utils.process_immigration_data(immigration_df)
 
         # get processed global temp data
-        temp_df = self.process_global_land_temperatures(input_data, temperature_file_name)
+        temp_df = self.process_global_land_temperatures(input_data, fname_temp)
 
         # clean immigration spark dataframe
-        spark_etl = ImmigrationSparkifyETL(spark=self.spark, data_im=immigration_df,data_temp=temp_df)
+        spark_etl = ImmigrationSparkifyETL(spark=self.spark, data_im=immigration_df, data_temp=temp_df)
 
         # create arrival of immigrants calendar dimension table
-        spark_etl.create_immigration_calendar_dimension(output_data)
+        df_im_calender = spark_etl.create_t_immigration_calendar_dim(output_data)
 
         # create country dimension table
-        spark_etl.create_country_dimension_table(temp_df, output_data)
+        df_country = spark_etl.create_t_country_dim(output_data, f_mapping)
 
         # create immigration fact table
-        spark_etl.create_immigration_fact_table(self.spark, immigration_df, output_data)
+        df_im_fact = spark_etl.create_t_immigration_fact(output_data)
+
+        # Check data sanity here
+        spark_etl.check_data_sanity(df_im_calender, "t_immigration_calendar")
+        spark_etl.check_data_sanity(df_country, "t_country")
+        spark_etl.check_data_sanity(df_im_fact, "t_immigration_fact")
 
     def process_demographics_data(self, input_data, output_data, file_name):
         """
@@ -65,7 +70,10 @@ class ETL:
 
         # create demographic dimension table
         etl_us_dem = ImmigrationSparkifyETL(self.spark, data_us_dem=df_us_dem)
-        etl_us_dem.create_t_us_dem_dimension(output_data)
+        df_us_dem = etl_us_dem.create_t_us_dem_dimension(output_data)
+
+        # Check data sanity
+        etl_us_dem.check_data_sanity(df_us_dem, "t_us_demographics")
 
     def process_global_land_temperatures(self, input_data, file_name):
         """
@@ -91,7 +99,11 @@ class ETL:
         df_air_traffic = Utils.process_air_traffic_data(df_air_traffic)
 
         # create air traffic table
-        ImmigrationSparkifyETL.create_air_traffic_dimension(df_air_traffic, output_data)
+        etl_im = ImmigrationSparkifyETL(self.spark, data_air_traffic=df_air_traffic)
+        df_air_traffic = etl_im.create_t_air_traffic_dim(df_air_traffic, output_data)
+
+        # Check data sanity
+        etl_im.check_data_sanity(df_air_traffic, "t_air_traffic")
 
         return df_air_traffic
 
@@ -113,7 +125,7 @@ if __name__ == "__main__":
     # Then we will be loading the i94res to country mapping file
     mapping_file = spark.read.csv(mapping_file, header=True, inferSchema=True)
 
-    # Now let's execute all code flows
+    # Now let's execute all code flows including data cleaning and data sanity checking
     etl.process_immigration_data(dir_input, dir_output, immigration_file_name, temperature_file_name,
                                  mapping_file)
 
